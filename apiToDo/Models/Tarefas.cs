@@ -17,7 +17,6 @@ namespace apiToDo.Models
                 new TarefaDTO { ID_TAREFA = 2, DS_TAREFA = "Fazer Atividade Faculdade" },
                 new TarefaDTO { ID_TAREFA = 3, DS_TAREFA = "Subir Projeto de Teste no GitHub" }
             };
-
         }
 
         public List<TarefaDTO> lstTarefas()
@@ -37,14 +36,14 @@ namespace apiToDo.Models
         {
             try
             {
-                List<TarefaDTO> lstResponse = lstTarefas();
-                lstResponse.Add(Request);
+                _tarefas.Add(Request);
             }
             catch (Exception ex)
             {
                 throw ex;
             }
         }
+
         public void DeletarTarefa(int ID_TAREFA)
         {
             try

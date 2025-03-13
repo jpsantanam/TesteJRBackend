@@ -13,9 +13,9 @@ namespace apiToDo.Controllers
         
         private Tarefas _tarefas;
 
-        public TarefasController()
+        public TarefasController(Tarefas tarefas)
         {
-            _tarefas = new Tarefas();
+            _tarefas = tarefas;
         }
 
         [HttpPost("lstTarefas")]
@@ -37,9 +37,8 @@ namespace apiToDo.Controllers
         {
             try
             {
-
-                return StatusCode(200);
-
+                _tarefas.InserirTarefa(Request);
+                return Ok(_tarefas.lstTarefas());
 
             }
 
