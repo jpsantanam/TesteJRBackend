@@ -49,14 +49,17 @@ namespace apiToDo.Controllers
         }
 
         [HttpGet("DeletarTarefa")]
-        public ActionResult DeleteTask([FromQuery] int ID_TAREFA)
+        public ActionResult DeleteTask([FromQuery(Name="ID_TAREFA")] int idTarefa)
         {
             try
             {
-
-                return StatusCode(200);
+                _tarefas.DeletarTarefa(idTarefa);
+                return Ok(_tarefas.lstTarefas());
             }
-
+            catch(TarefaNaoEncontrada ex) //Verifica se a exceção lançada é do tipo personalizado TarefaNaoEncontrada
+            {
+                return NotFound(ex.Message); //Retorna a mensagem de erro com o código 404
+            }
             catch (Exception ex)
             {
                 return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
