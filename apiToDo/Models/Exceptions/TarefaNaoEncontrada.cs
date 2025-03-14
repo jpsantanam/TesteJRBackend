@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace apiToDo.Models
+namespace apiToDo.Models.Exceptions
 {
     public class TarefaNaoEncontrada : Exception
     {

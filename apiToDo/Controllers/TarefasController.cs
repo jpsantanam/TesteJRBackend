@@ -1,8 +1,9 @@
-﻿using apiToDo.DTO;
-using apiToDo.Models;
-using Microsoft.AspNetCore.Authorization;
+﻿using apiToDo.Models;
+using apiToDo.Repository;
+using apiToDo.DTO;
 using Microsoft.AspNetCore.Mvc;
 using System;
+using apiToDo.Models.Exceptions;
 
 namespace apiToDo.Controllers
 {
@@ -11,11 +12,11 @@ namespace apiToDo.Controllers
     public class TarefasController : ControllerBase
     {
         
-        private readonly Tarefas _tarefas;
+        private readonly TarefaRepository _tarefaRepository;
 
-        public TarefasController(Tarefas tarefas)
+        public TarefasController(TarefaRepository tarefaRepository)
         {
-            _tarefas = tarefas;
+            _tarefaRepository = tarefaRepository;
         }
 
         [HttpGet]
@@ -23,7 +24,7 @@ namespace apiToDo.Controllers
         {
             try
             {
-                return Ok(_tarefas.LstTarefas());
+                return Ok(_tarefaRepository.LstTarefas());
             }
 
             catch (Exception ex)
@@ -33,11 +34,11 @@ namespace apiToDo.Controllers
         }
 
         [HttpGet("{id}")]
-        public ActionResult GetTarefaById(int id)
+        public ActionResult SelecionarTarefaPorId(Guid id)
         {
             try
             {
-                return Ok(_tarefas.GetTarefaById(id));
+                return Ok(_tarefaRepository.SelecionarTarefaPorId(id));
             }
             catch (TarefaNaoEncontrada ex) //Verifica se a exceção lançada é do tipo personalizado TarefaNaoEncontrada
             {
@@ -50,12 +51,12 @@ namespace apiToDo.Controllers
         }
 
         [HttpPost]
-        public ActionResult InserirTarefas([FromBody] TarefaDTO request)
+        public ActionResult InserirTarefas([FromBody] TarefaDto tarefaDto)
         {
             try
             {
-                _tarefas.InserirTarefa(request);
-                return Ok(_tarefas.LstTarefas());
+                _tarefaRepository.InserirTarefa(tarefaDto);
+                return Ok(_tarefaRepository.LstTarefas());
 
             }
 
@@ -66,14 +67,32 @@ namespace apiToDo.Controllers
         }
 
         [HttpDelete("{id}")]
-        public ActionResult DeleteTask(int id)
+        public ActionResult DeletarTarefa(Guid id)
         {
             try
             {
-                _tarefas.DeletarTarefa(id);
-                return Ok(_tarefas.LstTarefas());
+                _tarefaRepository.DeletarTarefa(id);
+                return Ok(_tarefaRepository.LstTarefas());
             }
             catch(TarefaNaoEncontrada ex) //Verifica se a exceção lançada é do tipo personalizado TarefaNaoEncontrada
+            {
+                return NotFound(ex.Message); //Retorna a mensagem de erro com o código 404
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
+            }
+        }
+
+        [HttpPut]
+        public ActionResult AtualizarTarefa([FromBody] Tarefa request)
+        {
+            try
+            {
+                _tarefaRepository.AtualizarTarefa(request);
+                return Ok(_tarefaRepository.LstTarefas());
+            }
+            catch (TarefaNaoEncontrada ex) //Verifica se a exceção lançada é do tipo personalizado TarefaNaoEncontrada
             {
                 return NotFound(ex.Message); //Retorna a mensagem de erro com o código 404
             }

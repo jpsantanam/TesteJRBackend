@@ -1,9 +1,7 @@
 ﻿namespace apiToDo.DTO
 {
-    public class TarefaDTO
+    public class TarefaDto
     {
-        public int IdTarefa { get; set; }
         public string DsTarefa { get; set; }
-
     }
 }
