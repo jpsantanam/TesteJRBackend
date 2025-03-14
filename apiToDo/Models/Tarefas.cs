@@ -13,13 +13,13 @@ namespace apiToDo.Models
         {
             _tarefas = new List<TarefaDTO>
             {
-                new TarefaDTO { ID_TAREFA = 1, DS_TAREFA = "Fazer Compras" },
-                new TarefaDTO { ID_TAREFA = 2, DS_TAREFA = "Fazer Atividade Faculdade" },
-                new TarefaDTO { ID_TAREFA = 3, DS_TAREFA = "Subir Projeto de Teste no GitHub" }
+                new() { IdTarefa = 1, DsTarefa = "Fazer Compras" },
+                new() { IdTarefa = 2, DsTarefa = "Fazer Atividade Faculdade" },
+                new() { IdTarefa = 3, DsTarefa = "Subir Projeto de Teste no GitHub" }
             };
         }
 
-        public List<TarefaDTO> lstTarefas()
+        public List<TarefaDTO> LstTarefas()
         {
             try
             {
@@ -32,11 +32,11 @@ namespace apiToDo.Models
         }
 
 
-        public void InserirTarefa(TarefaDTO Request)
+        public void InserirTarefa(TarefaDTO request)
         {
             try
             {
-                _tarefas.Add(Request);
+                _tarefas.Add(request);
             }
             catch (Exception ex)
             {
@@ -46,7 +46,7 @@ namespace apiToDo.Models
 
         public void DeletarTarefa(int idTarefa)
         {
-            var tarefa = _tarefas.FirstOrDefault(x => x.ID_TAREFA == idTarefa); //Percorre a lista de tarefas e retorna a primeira ocorrência (se tiver) ou nulo
+            var tarefa = _tarefas.FirstOrDefault(x => x.IdTarefa == idTarefa); //Percorre a lista de tarefas e retorna a primeira ocorrência (se tiver) ou nulo
             
             if (tarefa is null) //Verifica se a tarefa foi encontrada
             {

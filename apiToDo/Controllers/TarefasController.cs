@@ -18,12 +18,12 @@ namespace apiToDo.Controllers
             _tarefas = tarefas;
         }
 
-        [HttpPost("lstTarefas")]
-        public ActionResult lstTarefas()
+        [HttpGet]
+        public ActionResult LstTarefas()
         {
             try
             {
-                return Ok(_tarefas.lstTarefas());
+                return Ok(_tarefas.LstTarefas());
             }
 
             catch (Exception ex)
@@ -32,13 +32,13 @@ namespace apiToDo.Controllers
             }
         }
 
-        [HttpPost("InserirTarefas")]
-        public ActionResult InserirTarefas([FromBody] TarefaDTO Request)
+        [HttpPost]
+        public ActionResult InserirTarefas([FromBody] TarefaDTO request)
         {
             try
             {
-                _tarefas.InserirTarefa(Request);
-                return Ok(_tarefas.lstTarefas());
+                _tarefas.InserirTarefa(request);
+                return Ok(_tarefas.LstTarefas());
 
             }
 
@@ -48,13 +48,13 @@ namespace apiToDo.Controllers
             }
         }
 
-        [HttpGet("DeletarTarefa")]
+        [HttpDelete]
         public ActionResult DeleteTask([FromQuery(Name="ID_TAREFA")] int idTarefa)
         {
             try
             {
                 _tarefas.DeletarTarefa(idTarefa);
-                return Ok(_tarefas.lstTarefas());
+                return Ok(_tarefas.LstTarefas());
             }
             catch(TarefaNaoEncontrada ex) //Verifica se a exceção lançada é do tipo personalizado TarefaNaoEncontrada
             {
