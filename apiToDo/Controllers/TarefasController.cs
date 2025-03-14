@@ -11,7 +11,7 @@ namespace apiToDo.Controllers
     public class TarefasController : ControllerBase
     {
         
-        private Tarefas _tarefas;
+        private readonly Tarefas _tarefas;
 
         public TarefasController(Tarefas tarefas)
         {
@@ -26,6 +26,23 @@ namespace apiToDo.Controllers
                 return Ok(_tarefas.LstTarefas());
             }
 
+            catch (Exception ex)
+            {
+                return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
+            }
+        }
+
+        [HttpGet("{id}")]
+        public ActionResult GetTarefaById(int id)
+        {
+            try
+            {
+                return Ok(_tarefas.GetTarefaById(id));
+            }
+            catch (TarefaNaoEncontrada ex) //Verifica se a exceção lançada é do tipo personalizado TarefaNaoEncontrada
+            {
+                return NotFound(ex.Message); //Retorna a mensagem de erro com o código 404
+            }
             catch (Exception ex)
             {
                 return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });
@@ -48,12 +65,12 @@ namespace apiToDo.Controllers
             }
         }
 
-        [HttpDelete]
-        public ActionResult DeleteTask([FromQuery(Name="ID_TAREFA")] int idTarefa)
+        [HttpDelete("{id}")]
+        public ActionResult DeleteTask(int id)
         {
             try
             {
-                _tarefas.DeletarTarefa(idTarefa);
+                _tarefas.DeletarTarefa(id);
                 return Ok(_tarefas.LstTarefas());
             }
             catch(TarefaNaoEncontrada ex) //Verifica se a exceção lançada é do tipo personalizado TarefaNaoEncontrada

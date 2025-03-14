@@ -31,6 +31,25 @@ namespace apiToDo.Models
             }
         }
 
+        public TarefaDTO GetTarefaById(int idTarefa)
+        {
+            try
+            {
+                var tarefa = _tarefas.FirstOrDefault(x => x.IdTarefa == idTarefa); //Busca a tarefa na lista de tarefas
+
+                if (tarefa is null) //Verifica se a tarefa foi encontrada
+                {
+                    throw new TarefaNaoEncontrada($"Nenhuma tarefa encontrada com o id {idTarefa}."); //Caso não tenha sido encontrada, lança a exceção personalizada TarefaNaoEncontrada
+                }
+
+                return tarefa; //Retorna a tarefa encontrada
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
 
         public void InserirTarefa(TarefaDTO request)
         {
@@ -46,14 +65,9 @@ namespace apiToDo.Models
 
         public void DeletarTarefa(int idTarefa)
         {
-            var tarefa = _tarefas.FirstOrDefault(x => x.IdTarefa == idTarefa); //Percorre a lista de tarefas e retorna a primeira ocorrência (se tiver) ou nulo
-            
-            if (tarefa is null) //Verifica se a tarefa foi encontrada
-            {
-                throw new TarefaNaoEncontrada($"Nenhuma tarefa encontrada com o id {idTarefa}."); //Lança uma exceção personalizada
-            }
+            var tarefa = GetTarefaById(idTarefa); //Chama o método GetTarefaById para retornar a tarefa, caso ela exista
 
-            _tarefas.Remove(tarefa); //Remove a tarefa encontrada
+            _tarefas.Remove(tarefa); //Remove a tarefa da lista
         }
     }
 }
