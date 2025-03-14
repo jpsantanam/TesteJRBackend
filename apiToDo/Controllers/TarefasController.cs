@@ -11,7 +11,6 @@ namespace apiToDo.Controllers
     [Route("[controller]")]
     public class TarefasController : ControllerBase
     {
-        
         private readonly TarefaRepository _tarefaRepository;
 
         public TarefasController(TarefaRepository tarefaRepository)
@@ -57,9 +56,7 @@ namespace apiToDo.Controllers
             {
                 _tarefaRepository.InserirTarefa(tarefaDto);
                 return Ok(_tarefaRepository.LstTarefas());
-
             }
-
             catch (Exception ex)
             {
                 return StatusCode(400, new { msg = $"Ocorreu um erro em sua API {ex.Message}" });

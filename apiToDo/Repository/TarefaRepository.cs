@@ -9,7 +9,7 @@ namespace apiToDo.Repository
 {
     public class TarefaRepository
     {
-        private List<Tarefa> _tarefas;
+        private readonly List<Tarefa> _tarefas;
 
         public TarefaRepository()
         {
